@@ -1,9 +1,13 @@
+package bentleyottmann;
+
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
-public class Point implements Comparable<Point> {
+public class Point {
     final public double x;
     final public double y;
+
+    final private static double EPSILON = 1E-12;
 
     public Point(double x, double y) {
         this.x = x;
@@ -19,26 +23,13 @@ public class Point implements Comparable<Point> {
     }
 
     @Override
-    public int compareTo(@NotNull Point p2) {
-        if (y > p2.y || (y == p2.y && x < p2.x)) {
-            return -1;
-        }
-
-        if (y < p2.y || (y == p2.y && x > p2.x)) {
-            return 1;
-        }
-
-        return 0;
-    }
-
-    @Override
     public boolean equals(@Nullable Object o) {
         if (!(o instanceof Point)) {
             return false;
         }
 
-        Point p = (Point) o;
-        return x == p.x && y == p.y;
+        final Point p = (Point) o;
+        return Math.abs(x - p.x) < EPSILON && Math.abs(y - p.y) < EPSILON;
     }
 
     @Override

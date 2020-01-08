@@ -1,3 +1,5 @@
+package bentleyottmann;
+
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
@@ -10,7 +12,8 @@ final class Event extends Point {
     public final static int POINT_RIGHT = 2;
     public final static int POINT_INTERSECT = 3;
 
-    private int mPointType;
+    final private int mPointType;
+    final private double mPriority;
 
     @NotNull
     final private List<SweepSegment> mSegments = new ArrayList<>();
@@ -18,6 +21,7 @@ final class Event extends Point {
     public Event(@NotNull Point p, @NotNull SweepSegment s, int pointType) {
         super(p.x, p.y);
         mPointType = pointType;
+        mPriority = x;
         mSegments.add(s);
     }
 
@@ -46,9 +50,11 @@ final class Event extends Point {
     }
 
     public double priority() {
-        return x;
+        return mPriority;
     }
 
+
+/*
     @Override
     public boolean equals(@Nullable Object o) {
         if (!(o instanceof Event)) {
@@ -68,6 +74,8 @@ final class Event extends Point {
             equalSegments = false;
         }
 
-        return super.equals(e) && equalSegments;
+        // return super.equals(e) && equalSegments && e.pointType() == pointType();
+        return equalSegments;
     }
+*/
 }

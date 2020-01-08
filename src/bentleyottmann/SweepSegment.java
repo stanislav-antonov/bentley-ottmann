@@ -1,3 +1,5 @@
+package bentleyottmann;
+
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
@@ -7,15 +9,11 @@ final public class SweepSegment extends Segment {
 
     public SweepSegment(@NotNull Point p1, @NotNull Point p2) {
         super(p1, p2);
-        if (this.p1.compareTo(this.p2) > 0) {
-            final Point swap = this.p1;
-            this.p1 = this.p2;
-            this.p2 = swap;
-        }
+        updatePosition(firstPoint().x);
     }
 
     public SweepSegment(@NotNull Segment s) {
-        this(s.p1, s.p2);
+        this(s.firstPoint(), s.secondPoint());
     }
 
     public double position() {
@@ -33,6 +31,21 @@ final public class SweepSegment extends Segment {
         }
 
         final SweepSegment s = (SweepSegment) o;
-        return super.equals(s) && s.position() == position();
+        return super.equals(s);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    void updatePosition(double x) {
+        double x1 = firstPoint().x;
+        double y1 = firstPoint().y;
+        double x2 = secondPoint().x;
+        double y2 = secondPoint().y;
+
+        double y = y1 + ( ((y2 - y1) * (x - x1)) / (x2 - x1) );
+        this.setPosition(y);
     }
 }

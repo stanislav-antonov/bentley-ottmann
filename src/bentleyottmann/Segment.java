@@ -1,14 +1,23 @@
+package bentleyottmann;
+
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
 public class Segment {
     @NotNull
-    public Point p1;
+    final private Point p1;
 
     @NotNull
-    public Point p2;
+    final private Point p2;
 
     public Segment(@NotNull Point p1, @NotNull Point p2) {
+        // TODO: if 'x' coordinates are equal, need compare by 'y' then
+        if (!(p2.x > p1.x)) {
+            Point swap = p1;
+            p1 = p2;
+            p2 = swap;
+        }
+
         this.p1 = p1;
         this.p2 = p2;
     }
@@ -16,15 +25,15 @@ public class Segment {
     // See: http://www.cs.swan.ac.uk/~cssimon/line_intersection.html
     @Nullable
     public static Point intersection(@NotNull Segment s1, @NotNull Segment s2) {
-        final double x1 = s1.p1.x;
-        final double y1 = s1.p1.y;
-        final double x2 = s1.p2.x;
-        final double y2 = s1.p2.y;
+        final double x1 = s1.firstPoint().x;
+        final double y1 = s1.firstPoint().y;
+        final double x2 = s1.secondPoint().x;
+        final double y2 = s1.secondPoint().y;
 
-        final double x3 = s2.p1.x;
-        final double y3 = s2.p1.y;
-        final double x4 = s2.p2.x;
-        final double y4 = s2.p2.y;
+        final double x3 = s2.firstPoint().x;
+        final double y3 = s2.firstPoint().y;
+        final double x4 = s2.secondPoint().x;
+        final double y4 = s2.secondPoint().y;
 
         final double v = (x4 - x3) * (y1 - y2) - (x1 - x2) * (y4 - y3);
         if (v == 0) {
@@ -50,12 +59,27 @@ public class Segment {
             return false;
         }
 
-        Segment s = (Segment) o;
-        return s.p1.equals(p1) && s.p2.equals(p2);
+        final Segment s = (Segment) o;
+        return s.firstPoint().equals(firstPoint()) && s.secondPoint().equals(secondPoint());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * firstPoint().hashCode() + secondPoint().hashCode();
     }
 
     @NotNull
     public final String toString() {
-        return "[" + p1 + " : " + p2 + "]";
+        return "[" + firstPoint() + " : " + secondPoint() + "]";
+    }
+
+    @NotNull
+    public Point firstPoint() {
+        return p1;
+    }
+
+    @NotNull
+    public Point secondPoint() {
+        return p2;
     }
 }
