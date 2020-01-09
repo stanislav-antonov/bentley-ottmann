@@ -1,7 +1,6 @@
 package bentleyottmann;
 
 import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;

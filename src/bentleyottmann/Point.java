@@ -3,6 +3,8 @@ package bentleyottmann;
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
+import java.util.Locale;
+
 public class Point {
     final public double x;
     final public double y;
@@ -39,6 +41,6 @@ public class Point {
 
     @Override
     public final String toString() {
-        return "[" + x + ", " + y + "]";
+        return String.format(Locale.getDefault(), "[%s, %s]", x, y);
     }
 }

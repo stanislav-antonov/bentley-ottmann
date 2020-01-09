@@ -3,6 +3,8 @@ package bentleyottmann;
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
+import java.util.Locale;
+
 public class Segment {
     @NotNull
     final private Point p1;
@@ -10,8 +12,15 @@ public class Segment {
     @NotNull
     final private Point p2;
 
+    @NotNull
+    final private String mName;
+
     public Segment(@NotNull Point p1, @NotNull Point p2) {
-        // TODO: if 'x' coordinates are equal, need compare by 'y' then
+        this(p1, p2, null);
+    }
+
+    public Segment(@NotNull Point p1, @NotNull Point p2, @Nullable String name) {
+        // TODO: if 'x' coordinates are equal, then need to compare by 'y' afterwards
         if (!(p2.x > p1.x)) {
             Point swap = p1;
             p1 = p2;
@@ -20,6 +29,8 @@ public class Segment {
 
         this.p1 = p1;
         this.p2 = p2;
+
+        this.mName = name;
     }
 
     // See: http://www.cs.swan.ac.uk/~cssimon/line_intersection.html
@@ -70,7 +81,12 @@ public class Segment {
 
     @NotNull
     public final String toString() {
-        return "[" + firstPoint() + " : " + secondPoint() + "]";
+        return String.format(Locale.getDefault(), "%s [%s : %s]", name(), firstPoint(), secondPoint());
+    }
+
+    @Nullable
+    public String name() {
+        return mName;
     }
 
     @NotNull
