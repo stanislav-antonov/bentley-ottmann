@@ -47,15 +47,15 @@ final public class BentleyOttmann {
                 final SweepSegment segA = above(segE);
                 final SweepSegment segB = below(segE);
 
-                addEventIfIntersection(segE, segA, false, E);
-                addEventIfIntersection(segE, segB, false, E);
+                addEventIfIntersection(segE, segA, E, false);
+                addEventIfIntersection(segE, segB, E, false);
             } else if (E.pointType() == Event.POINT_RIGHT) {
                 final SweepSegment segE = E.firstSegment();
                 final SweepSegment segA = above(segE);
                 final SweepSegment segB = below(segE);
 
                 removeSweepLineStatus(segE);
-                addEventIfIntersection(segA, segB, true, E);
+                addEventIfIntersection(segA, segB, E, true);
             } else {
                 mIntersections.add(E);
                 SweepSegment segE1 = E.firstSegment();
@@ -72,8 +72,8 @@ final public class BentleyOttmann {
 
                 final SweepSegment segA = above(segE2);
                 final SweepSegment segB = below(segE1);
-                addEventIfIntersection(segE2, segA, true, E);
-                addEventIfIntersection(segE1, segB, true, E);
+                addEventIfIntersection(segE2, segA, E, true);
+                addEventIfIntersection(segE1, segB, E, true);
             }
         }
 
@@ -91,7 +91,8 @@ final public class BentleyOttmann {
         mSweepLine.clear();
     }
 
-    private void addEventIfIntersection(@Nullable SweepSegment s1, @Nullable SweepSegment s2, boolean check, @NotNull Event E) {
+    private void addEventIfIntersection(@Nullable SweepSegment s1, @Nullable SweepSegment s2,
+                                        @NotNull Event E, boolean check) {
         if (s1 != null && s2 != null) {
             final Point i = Segment.intersection(s1, s2);
             // Check if the further event point intersection is ahead
