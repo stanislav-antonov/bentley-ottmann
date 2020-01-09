@@ -8,7 +8,6 @@ import java.util.*;
 // See:
 // http://geomalgorithms.com/a09-_intersect-3.html
 // https://en.wikipedia.org/wiki/Bentley%E2%80%93Ottmann_algorithm
-// https://www.hackerearth.com/practice/math/geometry/line-intersection-using-bentley-ottmann-algorithm/tutorial/
 final public class BentleyOttmann {
     @NotNull
     private final Queue<Event> mEventQueue = new PriorityQueue<>(new Comparator<Event>() {
