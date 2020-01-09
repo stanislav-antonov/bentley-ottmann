@@ -51,30 +51,4 @@ final class Event extends Point {
     public double priority() {
         return mPriority;
     }
-
-
-/*
-    @Override
-    public boolean equals(@Nullable Object o) {
-        if (!(o instanceof Event)) {
-            return false;
-        }
-
-        final Event e = (Event) o;
-
-        boolean equalSegments;
-        if (e.segments().size() == segments().size()) {
-            if (e.segments().size() == 2) {
-                equalSegments = (e.firstSegment().equals(firstSegment()) && e.secondSegment().equals(secondSegment()));
-            } else {
-                equalSegments = e.firstSegment().equals(firstSegment());
-            }
-        } else {
-            equalSegments = false;
-        }
-
-        // return super.equals(e) && equalSegments && e.pointType() == pointType();
-        return equalSegments;
-    }
-*/
 }
