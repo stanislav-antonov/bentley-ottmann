@@ -13,8 +13,7 @@ public class Main {
 
         final BentleyOttmann bentleyOttmann = new BentleyOttmann();
         bentleyOttmann.addSegments(segments);
-
-        final List<Point> intersections = bentleyOttmann.findIntersections();
-        intersections.forEach(System.out::println);
+        bentleyOttmann.findIntersections();
+        bentleyOttmann.intersections().forEach(System.out::println);
     }
 }

@@ -18,6 +18,9 @@ final public class BentleyOttmann {
     @NotNull
     final private List<Point> mIntersections = new ArrayList<>();
 
+    @Nullable
+    private OnIntersectionListener mListener;
+
     public void addSegments(@NotNull List<Segment> segments) {
         for (Segment s : segments) {
             mEventQueue.add(new Event(s.firstPoint(), new SweepSegment(s), Event.Type.POINT_LEFT));
@@ -25,8 +28,7 @@ final public class BentleyOttmann {
         }
     }
 
-    @NotNull
-    public List<Point> findIntersections() {
+    public void findIntersections() {
         while (!mEventQueue.isEmpty()) {
             final Event E = mEventQueue.poll();
             if (E.type() == Event.Type.POINT_LEFT) {
@@ -51,6 +53,10 @@ final public class BentleyOttmann {
                 SweepSegment segE1 = E.firstSegment();
                 SweepSegment segE2 = E.secondSegment();
 
+                if (mListener != null) {
+                    mListener.onIntersection(segE1, segE2, E);
+                }
+
                 // Ensure segE1 is above segE2
                 if (!(segE1.position() > segE2.position())) {
                     final SweepSegment swap = segE1;
@@ -66,8 +72,6 @@ final public class BentleyOttmann {
                 addEventIfIntersection(segE1, segB, E, true);
             }
         }
-
-        return mIntersections;
     }
 
     @NotNull
@@ -79,6 +83,10 @@ final public class BentleyOttmann {
         mIntersections.clear();
         mEventQueue.clear();
         mSweepLine.clear();
+    }
+
+    public void setListener(@NotNull OnIntersectionListener listener) {
+        mListener = listener;
     }
 
     private void addEventIfIntersection(@Nullable SweepSegment s1, @Nullable SweepSegment s2,
