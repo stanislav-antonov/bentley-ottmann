@@ -43,13 +43,13 @@ public class BentleyOttmannTest extends TestCase {
 
     public void testFindIntersections3() {
         final List<Segment> segments = new ArrayList<>();
-        segments.add(new Segment(new Point(1.76, 6.86), new Point(3.84, 4.76), "a"));
-        segments.add(new Segment(new Point(3.96, 5.36), new Point(1.22, 2.4), "b"));
-        segments.add(new Segment(new Point(0.8, 3.1), new Point(8, 1.7), "c"));
-        segments.add(new Segment(new Point(7.4, 1.5), new Point(9.4, 4.8), "d"));
-        segments.add(new Segment(new Point(2.2, 6.04), new Point(4.9, 8.46), "e"));
-        segments.add(new Segment(new Point(3.72, 8.5), new Point(9.64, 4.02), "f"));
-        segments.add(new Segment(new Point(6.2, 6.98), new Point(5.9, 1.82), "g"));
+        segments.add(new Segment(new Point(1.76, 6.86), new Point(3.84, 4.76)));
+        segments.add(new Segment(new Point(3.96, 5.36), new Point(1.22, 2.4)));
+        segments.add(new Segment(new Point(0.8, 3.1), new Point(8, 1.7)));
+        segments.add(new Segment(new Point(7.4, 1.5), new Point(9.4, 4.8)));
+        segments.add(new Segment(new Point(2.2, 6.04), new Point(4.9, 8.46)));
+        segments.add(new Segment(new Point(3.72, 8.5), new Point(9.64, 4.02)));
+        segments.add(new Segment(new Point(6.2, 6.98), new Point(5.9, 1.82)));
 
         final BentleyOttmann bentleyOttmann = new BentleyOttmann();
         bentleyOttmann.addSegments(segments);
