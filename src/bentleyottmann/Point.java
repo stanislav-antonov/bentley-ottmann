@@ -16,14 +16,6 @@ public class Point implements Comparable<Point> {
         this.y = y;
     }
 
-    public static double angleOf(@NotNull Point p1, @NotNull Point p2) {
-        final double dy = p2.y - p1.y;
-        final double dx = p2.x - p1.x;
-        final double result = Math.toDegrees(Math.atan2(dy, dx));
-
-        return (result < 0) ? (360.0 + result) : result;
-    }
-
     @Override
     public boolean equals(@Nullable Object o) {
         if (!(o instanceof Point)) {
