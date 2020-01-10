@@ -9,11 +9,11 @@ final public class SweepSegment extends Segment {
 
     public SweepSegment(@NotNull Point p1, @NotNull Point p2, @Nullable String name) {
         super(p1, p2, name);
-        updatePosition(firstPoint().x);
+        updatePosition(leftPoint().x);
     }
 
     public SweepSegment(@NotNull Segment s) {
-        this(s.firstPoint(), s.secondPoint(), s.name());
+        this(s.leftPoint(), s.rightPoint(), s.name());
     }
 
     public double position() {
@@ -40,10 +40,10 @@ final public class SweepSegment extends Segment {
     }
 
     private void updatePosition(double x) {
-        final double x1 = firstPoint().x;
-        final double y1 = firstPoint().y;
-        final double x2 = secondPoint().x;
-        final double y2 = secondPoint().y;
+        final double x1 = leftPoint().x;
+        final double y1 = leftPoint().y;
+        final double x2 = rightPoint().x;
+        final double y2 = rightPoint().y;
 
         final double y = y1 + ( ((y2 - y1) * (x - x1)) / (x2 - x1) );
         this.setPosition(y);

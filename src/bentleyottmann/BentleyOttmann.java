@@ -23,8 +23,8 @@ final public class BentleyOttmann {
 
     public void addSegments(@NotNull List<Segment> segments) {
         for (Segment s : segments) {
-            mEventQueue.add(new Event(s.firstPoint(), new SweepSegment(s), Event.Type.POINT_LEFT));
-            mEventQueue.add(new Event(s.secondPoint(), new SweepSegment(s), Event.Type.POINT_RIGHT));
+            mEventQueue.add(new Event(s.leftPoint(), new SweepSegment(s), Event.Type.POINT_LEFT));
+            mEventQueue.add(new Event(s.rightPoint(), new SweepSegment(s), Event.Type.POINT_RIGHT));
         }
     }
 
@@ -32,7 +32,7 @@ final public class BentleyOttmann {
         while (!mEventQueue.isEmpty()) {
             final Event E = mEventQueue.poll();
             if (E.type() == Event.Type.POINT_LEFT) {
-                final SweepSegment segE = E.firstSegment();
+                final SweepSegment segE = E.upperSegment();
 
                 addSweepLineStatus(segE);
 
@@ -42,7 +42,7 @@ final public class BentleyOttmann {
                 addEventIfIntersection(segE, segA, E, false);
                 addEventIfIntersection(segE, segB, E, false);
             } else if (E.type() == Event.Type.POINT_RIGHT) {
-                final SweepSegment segE = E.firstSegment();
+                final SweepSegment segE = E.upperSegment();
                 final SweepSegment segA = above(segE);
                 final SweepSegment segB = below(segE);
 
@@ -50,18 +50,11 @@ final public class BentleyOttmann {
                 addEventIfIntersection(segA, segB, E, true);
             } else {
                 mIntersections.add(E);
-                SweepSegment segE1 = E.firstSegment();
-                SweepSegment segE2 = E.secondSegment();
+                SweepSegment segE1 = E.upperSegment();
+                SweepSegment segE2 = E.lowerSegment();
 
                 if (mListener != null) {
                     mListener.onIntersection(segE1, segE2, E);
-                }
-
-                // Ensure segE1 is above segE2
-                if (!(segE1.position() > segE2.position())) {
-                    final SweepSegment swap = segE1;
-                    segE1 = segE2;
-                    segE2 = swap;
                 }
 
                 swap(segE1, segE2);

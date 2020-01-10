@@ -25,6 +25,11 @@ final class Event extends Point {
     public Event(@NotNull Point p, @NotNull SweepSegment s1, @NotNull SweepSegment s2) {
         this(p, s1, Type.INTERSECTION);
         mSegments.add(s2);
+
+        // Ensure s1 is above s2
+        if (!(mSegments.get(0).position() > mSegments.get(1).position())) {
+            Collections.swap(mSegments, 0, 1);
+        }
     }
 
     public Type type() {
@@ -32,12 +37,12 @@ final class Event extends Point {
     }
 
     @NotNull
-    public SweepSegment firstSegment() {
+    public SweepSegment upperSegment() {
         return mSegments.get(0);
     }
 
     @NotNull
-    public SweepSegment secondSegment() {
+    public SweepSegment lowerSegment() {
         return mSegments.get(1);
     }
 

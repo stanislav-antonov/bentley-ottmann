@@ -36,15 +36,15 @@ public class Segment {
     // See: http://www.cs.swan.ac.uk/~cssimon/line_intersection.html
     @Nullable
     public static Point intersection(@NotNull Segment s1, @NotNull Segment s2) {
-        final double x1 = s1.firstPoint().x;
-        final double y1 = s1.firstPoint().y;
-        final double x2 = s1.secondPoint().x;
-        final double y2 = s1.secondPoint().y;
+        final double x1 = s1.leftPoint().x;
+        final double y1 = s1.leftPoint().y;
+        final double x2 = s1.rightPoint().x;
+        final double y2 = s1.rightPoint().y;
 
-        final double x3 = s2.firstPoint().x;
-        final double y3 = s2.firstPoint().y;
-        final double x4 = s2.secondPoint().x;
-        final double y4 = s2.secondPoint().y;
+        final double x3 = s2.leftPoint().x;
+        final double y3 = s2.leftPoint().y;
+        final double x4 = s2.rightPoint().x;
+        final double y4 = s2.rightPoint().y;
 
         final double v = (x4 - x3) * (y1 - y2) - (x1 - x2) * (y4 - y3);
         if (v == 0) {
@@ -71,17 +71,17 @@ public class Segment {
         }
 
         final Segment s = (Segment) o;
-        return s.firstPoint().equals(firstPoint()) && s.secondPoint().equals(secondPoint());
+        return s.leftPoint().equals(leftPoint()) && s.rightPoint().equals(rightPoint());
     }
 
     @Override
     public int hashCode() {
-        return 31 * firstPoint().hashCode() + secondPoint().hashCode();
+        return 31 * leftPoint().hashCode() + rightPoint().hashCode();
     }
 
     @NotNull
     public String toString() {
-        return String.format(Locale.getDefault(), "%s [%s : %s]", name(), firstPoint(), secondPoint());
+        return String.format(Locale.getDefault(), "%s [%s : %s]", name(), leftPoint(), rightPoint());
     }
 
     @Nullable
@@ -90,12 +90,12 @@ public class Segment {
     }
 
     @NotNull
-    public Point firstPoint() {
+    public Point leftPoint() {
         return p1;
     }
 
     @NotNull
-    public Point secondPoint() {
+    public Point rightPoint() {
         return p2;
     }
 }
