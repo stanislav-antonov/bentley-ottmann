@@ -6,7 +6,7 @@ import com.sun.istack.internal.Nullable;
 import java.util.Locale;
 import java.util.Objects;
 
-final public class SweepSegment {
+final class SweepSegment {
 
     @NotNull
     final private Event e1;
@@ -19,7 +19,7 @@ final public class SweepSegment {
 
     private double mPosition;
 
-    public SweepSegment(@NotNull Segment s) {
+    SweepSegment(@NotNull Segment s) {
         mSegment = s;
 
         Event e1 = new Event(s.p1, this, Event.Type.POINT_LEFT);
@@ -37,32 +37,32 @@ final public class SweepSegment {
         updatePosition(leftEvent().x);
     }
 
-    public double position() {
+    double position() {
         return mPosition;
     }
 
-    public void setPosition(double position) {
+    void setPosition(double position) {
         mPosition = position;
     }
 
     @NotNull
-    public Event leftEvent() {
+    Event leftEvent() {
         return e1;
     }
 
     @NotNull
-    public Event rightEvent() {
+    Event rightEvent() {
         return e2;
     }
 
     @NotNull
-    public Segment segment() {
+    Segment segment() {
         return mSegment;
     }
 
     // See: http://www.cs.swan.ac.uk/~cssimon/line_intersection.html
     @Nullable
-    public static Point intersection(@NotNull SweepSegment s1, @NotNull SweepSegment s2) {
+    static Point intersection(@NotNull SweepSegment s1, @NotNull SweepSegment s2) {
         final double x1 = s1.leftEvent().x;
         final double y1 = s1.leftEvent().y;
         final double x2 = s1.rightEvent().x;

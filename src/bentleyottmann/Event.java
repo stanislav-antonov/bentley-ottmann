@@ -21,13 +21,13 @@ final class Event extends Point implements Comparable<Event> {
     @NotNull
     final private List<SweepSegment> mSegments = new ArrayList<>();
 
-    public Event(@NotNull Point p, @NotNull SweepSegment s1, @NotNull Type type) {
+    Event(@NotNull Point p, @NotNull SweepSegment s1, @NotNull Type type) {
         super(p.x, p.y);
         mType = type;
         mSegments.add(s1);
     }
 
-    public Event(@NotNull Point p, @NotNull SweepSegment s1, @NotNull SweepSegment s2) {
+    Event(@NotNull Point p, @NotNull SweepSegment s1, @NotNull SweepSegment s2) {
         this(p, s1, Type.INTERSECTION);
         mSegments.add(s2);
 
@@ -37,22 +37,22 @@ final class Event extends Point implements Comparable<Event> {
         }
     }
 
-    public void setType(@NotNull Type type) {
+    void setType(@NotNull Type type) {
         mType = type;
     }
 
     @NotNull
-    public Type type() {
+    Type type() {
         return mType;
     }
 
     @NotNull
-    public SweepSegment firstSegment() {
+    SweepSegment firstSegment() {
         return mSegments.get(0);
     }
 
     @NotNull
-    public SweepSegment secondSegment() {
+    SweepSegment secondSegment() {
         return mSegments.get(1);
     }
 
