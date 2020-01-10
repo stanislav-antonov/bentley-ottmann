@@ -10,28 +10,18 @@ import java.util.*;
 // https://en.wikipedia.org/wiki/Bentley%E2%80%93Ottmann_algorithm
 final public class BentleyOttmann {
     @NotNull
-    private final Queue<Event> mEventQueue = new PriorityQueue<>(new Comparator<Event>() {
-        @Override
-        public int compare(Event o1, Event o2) {
-            return Double.compare(o1.priority(), o2.priority());
-        }
-    });
+    final private Queue<Event> mEventQueue = new PriorityQueue<>();
 
     @NotNull
-    private final NavigableSet<SweepSegment> mSweepLine = new TreeSet<>(new Comparator<SweepSegment>() {
-        @Override
-        public int compare(SweepSegment s1, SweepSegment s2) {
-            return Double.compare(s1.position(), s2.position());
-        }
-    });
+    final private NavigableSet<SweepSegment> mSweepLine = new TreeSet<>(Comparator.comparingDouble(SweepSegment::position));
 
     @NotNull
-    private final List<Point> mIntersections = new ArrayList<>();
+    final private List<Point> mIntersections = new ArrayList<>();
 
     public void addSegments(@NotNull List<Segment> segments) {
-        for (Segment segment : segments) {
-            mEventQueue.add(new Event(segment.firstPoint(), new SweepSegment(segment), Event.POINT_LEFT));
-            mEventQueue.add(new Event(segment.secondPoint(), new SweepSegment(segment), Event.POINT_RIGHT));
+        for (Segment s : segments) {
+            mEventQueue.add(new Event(s.firstPoint(), new SweepSegment(s), Event.Type.POINT_LEFT));
+            mEventQueue.add(new Event(s.secondPoint(), new SweepSegment(s), Event.Type.POINT_RIGHT));
         }
     }
 
@@ -39,7 +29,7 @@ final public class BentleyOttmann {
     public List<Point> findIntersections() {
         while (!mEventQueue.isEmpty()) {
             final Event E = mEventQueue.poll();
-            if (E.pointType() == Event.POINT_LEFT) {
+            if (E.type() == Event.Type.POINT_LEFT) {
                 final SweepSegment segE = E.firstSegment();
 
                 addSweepLineStatus(segE);
@@ -49,7 +39,7 @@ final public class BentleyOttmann {
 
                 addEventIfIntersection(segE, segA, E, false);
                 addEventIfIntersection(segE, segB, E, false);
-            } else if (E.pointType() == Event.POINT_RIGHT) {
+            } else if (E.type() == Event.Type.POINT_RIGHT) {
                 final SweepSegment segE = E.firstSegment();
                 final SweepSegment segA = above(segE);
                 final SweepSegment segB = below(segE);

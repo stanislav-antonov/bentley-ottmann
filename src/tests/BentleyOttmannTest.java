@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BentleyOttmannTest extends TestCase {
-    public void testFindIntersections1() throws Exception {
+    public void testFindIntersections1() {
         final List<Segment> segments = new ArrayList<>();
         segments.add(new Segment(new Point(0.8, 6.1), new Point(11.72, 9.32)));
         segments.add(new Segment(new Point(6.84, 3.56), new Point(15.06, 8.38)));
@@ -20,10 +20,10 @@ public class BentleyOttmannTest extends TestCase {
         bentleyOttmann.addSegments(segments);
         bentleyOttmann.findIntersections();
 
-        assertTrue(bentleyOttmann.intersections().size() == 4);
+        assertEquals(bentleyOttmann.intersections().size(), 4);
     }
 
-    public void testFindIntersections2() throws Exception {
+    public void testFindIntersections2() {
         final List<Segment> segments = new ArrayList<>();
         segments.add(new Segment(new Point(0.8, 6.1), new Point(11.72, 9.32)));
         segments.add(new Segment(new Point(6.84, 3.56), new Point(15.06, 8.38)));
@@ -36,23 +36,23 @@ public class BentleyOttmannTest extends TestCase {
         bentleyOttmann.addSegments(segments);
         bentleyOttmann.findIntersections();
 
-        assertTrue(bentleyOttmann.intersections().size() == 11);
+        assertEquals(bentleyOttmann.intersections().size(), 11);
     }
 
-    public void testFindIntersections3() throws Exception {
+    public void testFindIntersections3() {
         final List<Segment> segments = new ArrayList<>();
-        segments.add(new Segment(new Point(1.76, 6.86), new Point(3.84,4.76), "a"));
-        segments.add(new Segment(new Point(3.96, 5.36), new Point(1.22,2.4), "b"));
-        segments.add(new Segment(new Point(0.8, 3.1), new Point(8,1.7), "c"));
-        segments.add(new Segment(new Point(7.4, 1.5), new Point(9.4,4.8), "d"));
-        segments.add(new Segment(new Point(2.2, 6.04), new Point(4.9,8.46), "e"));
-        segments.add(new Segment(new Point(3.72, 8.5), new Point(9.64,4.02), "f"));
-        segments.add(new Segment(new Point(6.2, 6.98), new Point(5.9,1.82), "g"));
+        segments.add(new Segment(new Point(1.76, 6.86), new Point(3.84, 4.76), "a"));
+        segments.add(new Segment(new Point(3.96, 5.36), new Point(1.22, 2.4), "b"));
+        segments.add(new Segment(new Point(0.8, 3.1), new Point(8, 1.7), "c"));
+        segments.add(new Segment(new Point(7.4, 1.5), new Point(9.4, 4.8), "d"));
+        segments.add(new Segment(new Point(2.2, 6.04), new Point(4.9, 8.46), "e"));
+        segments.add(new Segment(new Point(3.72, 8.5), new Point(9.64, 4.02), "f"));
+        segments.add(new Segment(new Point(6.2, 6.98), new Point(5.9, 1.82), "g"));
 
         final BentleyOttmann bentleyOttmann = new BentleyOttmann();
         bentleyOttmann.addSegments(segments);
         bentleyOttmann.findIntersections();
 
-        assertTrue(bentleyOttmann.intersections().size() == 8);
+        assertEquals(bentleyOttmann.intersections().size(), 8);
     }
 }

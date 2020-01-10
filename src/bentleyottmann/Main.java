@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Main {
-
     public static void main(String[] args) {
         final List<Segment> segments = new ArrayList<>();
         segments.add(new Segment(new Point(1.01, 3.22), new Point(5.22, 7.93)));

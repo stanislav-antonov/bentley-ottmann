@@ -7,30 +7,28 @@ import java.util.Collections;
 import java.util.List;
 
 final class Event extends Point {
-    public final static int POINT_LEFT = 1;
-    public final static int POINT_RIGHT = 2;
-    public final static int POINT_INTERSECT = 3;
+    enum Type {
+        POINT_LEFT, POINT_RIGHT, INTERSECTION
+    }
 
-    final private int mPointType;
-    final private double mPriority;
+    final private Type mType;
 
     @NotNull
     final private List<SweepSegment> mSegments = new ArrayList<>();
 
-    public Event(@NotNull Point p, @NotNull SweepSegment s, int pointType) {
+    public Event(@NotNull Point p, @NotNull SweepSegment s, Type type) {
         super(p.x, p.y);
-        mPointType = pointType;
-        mPriority = x;
+        mType = type;
         mSegments.add(s);
     }
 
     public Event(@NotNull Point p, @NotNull SweepSegment s1, @NotNull SweepSegment s2) {
-        this(p, s1, POINT_INTERSECT);
+        this(p, s1, Type.INTERSECTION);
         mSegments.add(s2);
     }
 
-    public int pointType() {
-        return mPointType;
+    public Type type() {
+        return mType;
     }
 
     @NotNull
@@ -46,9 +44,5 @@ final class Event extends Point {
     @NotNull
     public List<SweepSegment> segments() {
         return Collections.unmodifiableList(mSegments);
-    }
-
-    public double priority() {
-        return mPriority;
     }
 }

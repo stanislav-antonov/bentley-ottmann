@@ -4,6 +4,7 @@ import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class Segment {
     @NotNull
@@ -12,7 +13,7 @@ public class Segment {
     @NotNull
     final private Point p2;
 
-    @NotNull
+    @Nullable
     final private String mName;
 
     public Segment(@NotNull Point p1, @NotNull Point p2) {
@@ -20,9 +21,8 @@ public class Segment {
     }
 
     public Segment(@NotNull Point p1, @NotNull Point p2, @Nullable String name) {
-        // TODO: if 'x' coordinates are equal, then need to compare by 'y' afterwards
-        if (!(p2.x > p1.x)) {
-            Point swap = p1;
+        if (!(Objects.compare(p2, p1, Point::compareTo) == 1)) {
+            final Point swap = p1;
             p1 = p2;
             p2 = swap;
         }
@@ -80,7 +80,7 @@ public class Segment {
     }
 
     @NotNull
-    public final String toString() {
+    public String toString() {
         return String.format(Locale.getDefault(), "%s [%s : %s]", name(), firstPoint(), secondPoint());
     }
 

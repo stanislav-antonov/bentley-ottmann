@@ -5,7 +5,7 @@ import com.sun.istack.internal.Nullable;
 
 import java.util.Locale;
 
-public class Point {
+public class Point implements Comparable<Point> {
     final public double x;
     final public double y;
 
@@ -40,7 +40,20 @@ public class Point {
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return String.format(Locale.getDefault(), "[%s, %s]", x, y);
+    }
+
+    @Override
+    public int compareTo(@NotNull Point p) {
+        if (p.x < x || (Math.abs(p.x - x) < EPSILON && p.y < y)) {
+            return 1;
+        }
+
+        if (p.x > x || (Math.abs(p.x - x) < EPSILON && p.y > y)) {
+            return -1;
+        }
+
+        return 0;
     }
 }
