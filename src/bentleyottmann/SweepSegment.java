@@ -15,15 +15,15 @@ final class SweepSegment {
     final private Event e2;
 
     @NotNull
-    final private Segment mSegment;
+    final private ISegment mSegment;
 
     private double mPosition;
 
-    SweepSegment(@NotNull Segment s) {
+    SweepSegment(@NotNull ISegment s) {
         mSegment = s;
 
-        Event e1 = new Event(s.p1, this, Event.Type.POINT_LEFT);
-        Event e2 = new Event(s.p2, this, Event.Type.POINT_RIGHT);
+        Event e1 = new Event(s.p1(), this, Event.Type.POINT_LEFT);
+        Event e2 = new Event(s.p2(), this, Event.Type.POINT_RIGHT);
         if (!(Objects.compare(e2, e1, Event::compareTo) == 1)) {
             final Event swap = e1;
             e1 = e2; e2 = swap;
@@ -34,7 +34,7 @@ final class SweepSegment {
         this.e1 = e1;
         this.e2 = e2;
 
-        updatePosition(leftEvent().x);
+        updatePosition(leftEvent().point().x());
     }
 
     double position() {
@@ -56,22 +56,22 @@ final class SweepSegment {
     }
 
     @NotNull
-    Segment segment() {
+    ISegment segment() {
         return mSegment;
     }
 
     // See: http://www.cs.swan.ac.uk/~cssimon/line_intersection.html
     @Nullable
-    static Point intersection(@NotNull SweepSegment s1, @NotNull SweepSegment s2) {
-        final double x1 = s1.leftEvent().x;
-        final double y1 = s1.leftEvent().y;
-        final double x2 = s1.rightEvent().x;
-        final double y2 = s1.rightEvent().y;
+    static IPoint intersection(@NotNull SweepSegment s1, @NotNull SweepSegment s2, @NotNull IPointFactory pointFactory) {
+        final double x1 = s1.leftEvent().point().x();
+        final double y1 = s1.leftEvent().point().y();
+        final double x2 = s1.rightEvent().point().x();
+        final double y2 = s1.rightEvent().point().y();
 
-        final double x3 = s2.leftEvent().x;
-        final double y3 = s2.leftEvent().y;
-        final double x4 = s2.rightEvent().x;
-        final double y4 = s2.rightEvent().y;
+        final double x3 = s2.leftEvent().point().x();
+        final double y3 = s2.leftEvent().point().y();
+        final double x4 = s2.rightEvent().point().x();
+        final double y4 = s2.rightEvent().point().y();
 
         final double v = (x4 - x3) * (y1 - y2) - (x1 - x2) * (y4 - y3);
         if (v == 0) {
@@ -85,7 +85,7 @@ final class SweepSegment {
             final double px = x1 + ta * (x2 - x1);
             final double py = y1 + ta * (y2 - y1);
 
-            return new Point(px, py);
+            return pointFactory.create(px, py);
         }
 
         return null;
@@ -112,10 +112,10 @@ final class SweepSegment {
     }
 
     private void updatePosition(double x) {
-        final double x1 = leftEvent().x;
-        final double y1 = leftEvent().y;
-        final double x2 = rightEvent().x;
-        final double y2 = rightEvent().y;
+        final double x1 = leftEvent().point().x();
+        final double y1 = leftEvent().point().y();
+        final double x2 = rightEvent().point().x();
+        final double y2 = rightEvent().point().y();
 
         final double y = y1 + ( ((y2 - y1) * (x - x1)) / (x2 - x1) );
         this.setPosition(y);

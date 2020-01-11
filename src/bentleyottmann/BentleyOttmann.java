@@ -16,13 +16,20 @@ final public class BentleyOttmann {
     final private NavigableSet<SweepSegment> mSweepLine = new TreeSet<>(Comparator.comparingDouble(SweepSegment::position));
 
     @NotNull
-    final private List<Point> mIntersections = new ArrayList<>();
+    final private List<IPoint> mIntersections = new ArrayList<>();
+
+    @NotNull
+    final private IPointFactory mPointFactory;
 
     @Nullable
     private OnIntersectionListener mListener;
 
-    public void addSegments(@NotNull List<Segment> segments) {
-        for (Segment s : segments) {
+    public BentleyOttmann(@NotNull IPointFactory pointFactory) {
+        mPointFactory = pointFactory;
+    }
+
+    public void addSegments(@NotNull List<ISegment> segments) {
+        for (ISegment s : segments) {
             final SweepSegment ss = new SweepSegment(s);
             mEventQueue.add(ss.leftEvent());
             mEventQueue.add(ss.rightEvent());
@@ -50,12 +57,12 @@ final public class BentleyOttmann {
                 removeSweepLineStatus(segE);
                 addEventIfIntersection(segA, segB, E, true);
             } else {
-                mIntersections.add(E);
+                mIntersections.add(E.point());
                 SweepSegment segE1 = E.firstSegment();
                 SweepSegment segE2 = E.secondSegment();
 
                 if (mListener != null) {
-                    mListener.onIntersection(segE1.segment(), segE2.segment(), E);
+                    mListener.onIntersection(segE1.segment(), segE2.segment(), E.point());
                 }
 
                 swap(segE1, segE2);
@@ -69,7 +76,7 @@ final public class BentleyOttmann {
     }
 
     @NotNull
-    public List<Point> intersections() {
+    public List<IPoint> intersections() {
         return Collections.unmodifiableList(mIntersections);
     }
 
@@ -86,10 +93,10 @@ final public class BentleyOttmann {
     private void addEventIfIntersection(@Nullable SweepSegment s1, @Nullable SweepSegment s2,
                                         @NotNull Event E, boolean check) {
         if (s1 != null && s2 != null) {
-            final Point i = SweepSegment.intersection(s1, s2);
+            final IPoint i = SweepSegment.intersection(s1, s2, mPointFactory);
             // Check if the further event point intersection is ahead
             // relative the current sweep line position according to x.
-            if (i != null && i.x > E.x) {
+            if (i != null && i.x() > E.point().x()) {
                 final Event e = new Event(i, s1, s2);
                 if (check) {
                     if (mEventQueue.contains(e)) {

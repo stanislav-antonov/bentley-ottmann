@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-final class Event extends Point implements Comparable<Event> {
+final class Event implements Comparable<Event> {
     enum Type {
         POINT_LEFT, POINT_RIGHT, INTERSECTION
     }
@@ -19,15 +19,18 @@ final class Event extends Point implements Comparable<Event> {
     private Type mType;
 
     @NotNull
+    final private IPoint mPoint;
+
+    @NotNull
     final private List<SweepSegment> mSegments = new ArrayList<>();
 
-    Event(@NotNull Point p, @NotNull SweepSegment s1, @NotNull Type type) {
-        super(p.x, p.y);
+    Event(@NotNull IPoint p, @NotNull SweepSegment s1, @NotNull Type type) {
+        mPoint = p;
         mType = type;
         mSegments.add(s1);
     }
 
-    Event(@NotNull Point p, @NotNull SweepSegment s1, @NotNull SweepSegment s2) {
+    Event(@NotNull IPoint p, @NotNull SweepSegment s1, @NotNull SweepSegment s2) {
         this(p, s1, Type.INTERSECTION);
         mSegments.add(s2);
 
@@ -47,6 +50,11 @@ final class Event extends Point implements Comparable<Event> {
     }
 
     @NotNull
+    IPoint point() {
+        return mPoint;
+    }
+
+    @NotNull
     SweepSegment firstSegment() {
         return mSegments.get(0);
     }
@@ -58,16 +66,18 @@ final class Event extends Point implements Comparable<Event> {
 
     @Override
     public String toString() {
-        return String.format(Locale.getDefault(), "[%s, %s]", x, y);
+        return String.format(Locale.getDefault(), "[%s, %s]", point().x(), point().y());
     }
 
     @Override
-    public int compareTo(@NotNull Event p) {
-        if (p.x < x || (Math.abs(p.x - x) < EPSILON && p.y < y)) {
+    public int compareTo(@NotNull Event e) {
+        if (e.point().x() < point().x() ||
+                (Math.abs(e.point().x() - point().x()) < EPSILON && e.point().y() < point().y())) {
             return 1;
         }
 
-        if (p.x > x || (Math.abs(p.x - x) < EPSILON && p.y > y)) {
+        if (e.point().x() > point().x() ||
+                (Math.abs(e.point().x() - point().x()) < EPSILON && e.point().y() > point().y())) {
             return -1;
         }
 
@@ -81,11 +91,11 @@ final class Event extends Point implements Comparable<Event> {
         }
 
         final Event e = (Event) o;
-        return Math.abs(x - e.x) < EPSILON && Math.abs(y - e.y) < EPSILON;
+        return Math.abs(point().x() - e.point().x()) < EPSILON && Math.abs(point().y() - e.point().y()) < EPSILON;
     }
 
     @Override
     public int hashCode() {
-        return 31 * Double.valueOf(x).hashCode() + Double.valueOf(y).hashCode();
+        return 31 * Double.valueOf(point().x()).hashCode() + Double.valueOf(point().y()).hashCode();
     }
 }
