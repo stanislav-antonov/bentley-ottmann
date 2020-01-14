@@ -59,8 +59,8 @@ final public class BentleyOttmann {
             } else {
                 mIntersections.add(E.point());
 
-                SweepSegment segE1 = E.firstSegment();
-                SweepSegment segE2 = E.secondSegment();
+                final SweepSegment segE1 = E.firstSegment();
+                final SweepSegment segE2 = E.secondSegment();
 
                 if (mListener != null) {
                     mListener.onIntersection(segE1.segment(), segE2.segment(), E.point());
