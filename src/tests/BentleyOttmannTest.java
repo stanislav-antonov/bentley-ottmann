@@ -1,6 +1,8 @@
 package tests;
 
-import bentleyottmann.*;
+import bentleyottmann.BentleyOttmann;
+import bentleyottmann.IPoint;
+import bentleyottmann.ISegment;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -74,4 +76,32 @@ public class BentleyOttmannTest extends TestCase {
         bentleyOttmann.findIntersections();
         assertEquals(4, intersectionsOnSegment.size());
     }
+
+    /*
+    public void testFindIntersections5() {
+        final List<ISegment> segments = new ArrayList<>();
+        segments.add(new Segment(new Point (4.76,8.77), new Point(7.84,4.49) ));
+        segments.add(new Segment(new Point (7.34,4.61), new Point(10.5,6.05) ));
+        segments.add(new Segment(new Point (9.84,6.05), new Point (16.14,4.19)));
+        segments.add(new Segment(new Point (15.82,3.97), new Point(14.62,8.51)));
+        segments.add(new Segment(new Point (14.46,8.03), new Point (16.04,10.81)));
+        segments.add(new Segment(new Point (4.58,8.31), new Point (10.86,10.07)));
+        segments.add(new Segment(new Point (10.66,9.65), new Point (9.44,12.19)));
+        segments.add(new Segment(new Point (9.24,11.73), new Point(12.14,12.69) ));
+        segments.add(new Segment(new Point (11.4,12.75), new Point (16.14,10.39)));
+        segments.add(new Segment(new Point(5.9,6.35) , new Point (9.08,4.21)));
+        segments.add(new Segment(new Point (5.24,7.63), new Point (10.24,4.23)));
+        segments.add(new Segment(new Point (4.56,9.59), new Point(11.66,4.25) ));
+        segments.add(new Segment(new Point (6.28,10.51), new Point(13.16,4.47) ));
+        segments.add(new Segment(new Point(7.8,11.09) , new Point(15.48,3.57) ));
+        segments.add(new Segment(new Point  (9.54,13.03), new Point (16.86,4.67)));
+        segments.add(new Segment(new Point (10.58,13.23) , new Point (15.84,8.67)));
+
+        final Map<ISegment, List<IPoint>> intersectionsOnSegment = new HashMap<>();
+        final BentleyOttmann bentleyOttmann = new BentleyOttmann(Point::new);
+        bentleyOttmann.addSegments(segments);
+        bentleyOttmann.findIntersections();
+        assertEquals(4, intersectionsOnSegment.size());
+    }
+    */
 }
