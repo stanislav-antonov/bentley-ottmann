@@ -6,14 +6,13 @@ import java.util.TreeSet;
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
-public class SweepLine extends TreeSet<SweepSegment> {
+class SweepLine extends TreeSet<SweepSegment> {
     SweepLine() {
         super(Comparator.comparingDouble(SweepSegment::position));
     }
 
-    @Override
-    public boolean remove(@NotNull Object o) {
-        return removeIf(sweepSegment -> sweepSegment.nearlyEqual((SweepSegment) o));
+    void remove(@NotNull SweepSegment s) {
+        removeIf(sweepSegment -> sweepSegment.nearlyEqual(s));
     }
 
     void swap(@NotNull SweepSegment s1, @NotNull SweepSegment s2) {
