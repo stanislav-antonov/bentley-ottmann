@@ -10,10 +10,10 @@ import java.util.*;
 // https://en.wikipedia.org/wiki/Bentley%E2%80%93Ottmann_algorithm
 final public class BentleyOttmann {
     @NotNull
-    final private Queue<Event> mEventQueue = new PriorityQueue<>();
+    final private EventQueue mEventQueue = new EventQueue();
 
     @NotNull
-    final private NavigableSet<SweepSegment> mSweepLine = new TreeSet<>(Comparator.comparingDouble(SweepSegment::position));
+    final private SweepLine mSweepLine = new SweepLine();
 
     @NotNull
     final private List<IPoint> mIntersections = new ArrayList<>();
@@ -42,22 +42,23 @@ final public class BentleyOttmann {
             if (E.type() == Event.Type.POINT_LEFT) {
                 final SweepSegment segE = E.firstSegment();
 
-                addSweepLineStatus(segE);
+                mSweepLine.add(segE);
 
-                final SweepSegment segA = above(segE);
-                final SweepSegment segB = below(segE);
+                final SweepSegment segA = mSweepLine.above(segE);
+                final SweepSegment segB = mSweepLine.below(segE);
 
                 addEventIfIntersection(segE, segA, E, false);
                 addEventIfIntersection(segE, segB, E, false);
             } else if (E.type() == Event.Type.POINT_RIGHT) {
                 final SweepSegment segE = E.firstSegment();
-                final SweepSegment segA = above(segE);
-                final SweepSegment segB = below(segE);
+                final SweepSegment segA = mSweepLine.above(segE);
+                final SweepSegment segB = mSweepLine.below(segE);
 
-                removeSweepLineStatus(segE);
+                mSweepLine.remove(segE);
                 addEventIfIntersection(segA, segB, E, true);
             } else {
                 mIntersections.add(E.point());
+
                 SweepSegment segE1 = E.firstSegment();
                 SweepSegment segE2 = E.secondSegment();
 
@@ -65,10 +66,10 @@ final public class BentleyOttmann {
                     mListener.onIntersection(segE1.segment(), segE2.segment(), E.point());
                 }
 
-                swap(segE1, segE2);
+                mSweepLine.swap(segE1, segE2);
 
-                final SweepSegment segA = above(segE2);
-                final SweepSegment segB = below(segE1);
+                final SweepSegment segA = mSweepLine.above(segE2);
+                final SweepSegment segB = mSweepLine.below(segE1);
                 addEventIfIntersection(segE2, segA, E, true);
                 addEventIfIntersection(segE1, segB, E, true);
             }
@@ -80,22 +81,20 @@ final public class BentleyOttmann {
         return Collections.unmodifiableList(mIntersections);
     }
 
+    public void setListener(@NotNull OnIntersectionListener listener) {
+        mListener = listener;
+    }
+
     public void reset() {
         mIntersections.clear();
         mEventQueue.clear();
         mSweepLine.clear();
     }
 
-    public void setListener(@NotNull OnIntersectionListener listener) {
-        mListener = listener;
-    }
-
     private void addEventIfIntersection(@Nullable SweepSegment s1, @Nullable SweepSegment s2,
                                         @NotNull Event E, boolean check) {
         if (s1 != null && s2 != null) {
             final IPoint i = SweepSegment.intersection(s1, s2, mPointFactory);
-            // Check if the further event point intersection is ahead
-            // relative the current sweep line position according to x.
             if (i != null && i.x() > E.point().x()) {
                 final Event e = new Event(i, s1, s2);
                 if (check) {
@@ -107,42 +106,5 @@ final public class BentleyOttmann {
                 mEventQueue.add(e);
             }
         }
-    }
-
-    private void swap(@NotNull SweepSegment s1, @NotNull SweepSegment s2) {
-        mSweepLine.remove(s1);
-        mSweepLine.remove(s2);
-
-        final double swap = s1.position();
-        s1.setPosition(s2.position());
-        s2.setPosition(swap);
-
-        mSweepLine.add(s1);
-        mSweepLine.add(s2);
-    }
-
-    @Nullable
-    private SweepSegment above(@NotNull SweepSegment s) {
-        return mSweepLine.higher(s);
-    }
-
-    @Nullable
-    private SweepSegment below(@NotNull SweepSegment s) {
-        return mSweepLine.lower(s);
-    }
-
-    private void addSweepLineStatus(@NotNull SweepSegment s) {
-        mSweepLine.add(s);
-    }
-
-    private void removeSweepLineStatus(@NotNull final SweepSegment s) {
-        // A regular remove() can not be leveraged here since TreeSet tries to find
-        // the required element by traversing the underlying tree structure
-        // relying to the given Comparator (or to Comparable implementation of elements)
-        // and NOT to elements equals() implementation.
-        // For our case all the segments when being stored to TreeSet according
-        // to the Comparator are ordered by their position, when any removals should be
-        // performed based on segments equals() implementation.
-        mSweepLine.removeIf(sweepSegment -> sweepSegment.equals(s));
     }
 }

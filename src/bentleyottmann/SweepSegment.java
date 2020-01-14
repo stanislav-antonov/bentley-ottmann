@@ -7,7 +7,6 @@ import java.util.Locale;
 import java.util.Objects;
 
 final class SweepSegment {
-
     @NotNull
     final private Event e1;
 
@@ -91,19 +90,8 @@ final class SweepSegment {
         return null;
     }
 
-    @Override
-    public boolean equals(@Nullable Object o) {
-        if (!(o instanceof SweepSegment)) {
-            return false;
-        }
-
-        final SweepSegment s = (SweepSegment) o;
-        return s.leftEvent().equals(leftEvent()) && s.rightEvent().equals(rightEvent());
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * leftEvent().hashCode() + rightEvent().hashCode();
+    boolean nearlyEqual(@Nullable SweepSegment s) {
+        return s.leftEvent().nearlyEqual(leftEvent()) && s.rightEvent().nearlyEqual(rightEvent());
     }
 
     @NotNull

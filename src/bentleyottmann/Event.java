@@ -1,7 +1,6 @@
 package bentleyottmann;
 
 import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +12,7 @@ final class Event implements Comparable<Event> {
         POINT_LEFT, POINT_RIGHT, INTERSECTION
     }
 
-    final private static double EPSILON = 1E-12;
+    final private static double EPSILON = 1E-9;
 
     @NotNull
     private Type mType;
@@ -72,30 +71,36 @@ final class Event implements Comparable<Event> {
     @Override
     public int compareTo(@NotNull Event e) {
         if (e.point().x() < point().x() ||
-                (Math.abs(e.point().x() - point().x()) < EPSILON && e.point().y() < point().y())) {
+                (nearlyEqual(e.point().x(), point().x()) && e.point().y() < point().y())) {
             return 1;
         }
 
         if (e.point().x() > point().x() ||
-                (Math.abs(e.point().x() - point().x()) < EPSILON && e.point().y() > point().y())) {
+                (nearlyEqual(e.point().x(), point().x()) && e.point().y() > point().y())) {
             return -1;
         }
 
         return 0;
     }
 
-    @Override
-    public boolean equals(@Nullable Object o) {
-        if (!(o instanceof Event)) {
-            return false;
-        }
-
-        final Event e = (Event) o;
-        return Math.abs(point().x() - e.point().x()) < EPSILON && Math.abs(point().y() - e.point().y()) < EPSILON;
+    boolean nearlyEqual(@NotNull Event e) {
+        return nearlyEqual(point().x(), e.point().x()) && nearlyEqual(point().y(), e.point().y());
     }
 
-    @Override
-    public int hashCode() {
-        return 31 * Double.valueOf(point().x()).hashCode() + Double.valueOf(point().y()).hashCode();
+    // Taken from: https://floating-point-gui.de/errors/comparison/
+    private static boolean nearlyEqual(double a, double b) {
+        final double absA = Math.abs(a);
+        final double absB = Math.abs(b);
+        final double diff = Math.abs(a - b);
+
+        if (a == b) { // shortcut, handles infinities
+            return true;
+        } else if (a == 0 || b == 0 || (absA + absB < Double.MIN_NORMAL)) {
+            // a or b is zero or both are extremely close to it
+            // relative error is less meaningful here
+            return diff < (Event.EPSILON * Double.MIN_NORMAL);
+        } else { // use relative error
+            return diff / Math.min((absA + absB), Double.MAX_VALUE) < Event.EPSILON;
+        }
     }
 }
