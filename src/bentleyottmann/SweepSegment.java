@@ -59,6 +59,25 @@ final class SweepSegment {
         return mSegment;
     }
 
+    boolean nearlyEqual(@Nullable SweepSegment s) {
+        return s.leftEvent().nearlyEqual(leftEvent()) && s.rightEvent().nearlyEqual(rightEvent());
+    }
+
+    void updatePosition(double x) {
+        final double x1 = leftEvent().point().x();
+        final double y1 = leftEvent().point().y();
+        final double x2 = rightEvent().point().x();
+        final double y2 = rightEvent().point().y();
+
+        final double y = y1 + ( ((y2 - y1) * (x - x1)) / (x2 - x1) );
+        this.setPosition(y);
+    }
+
+    @NotNull
+    public String toString() {
+        return String.format(Locale.getDefault(), "[%s : %s]", leftEvent(), rightEvent());
+    }
+
     // See: http://www.cs.swan.ac.uk/~cssimon/line_intersection.html
     @Nullable
     static IPoint intersection(@NotNull SweepSegment s1, @NotNull SweepSegment s2, @NotNull IPointFactory pointFactory) {
@@ -88,24 +107,5 @@ final class SweepSegment {
         }
 
         return null;
-    }
-
-    boolean nearlyEqual(@Nullable SweepSegment s) {
-        return s.leftEvent().nearlyEqual(leftEvent()) && s.rightEvent().nearlyEqual(rightEvent());
-    }
-
-    @NotNull
-    public String toString() {
-        return String.format(Locale.getDefault(), "[%s : %s]", leftEvent(), rightEvent());
-    }
-
-    private void updatePosition(double x) {
-        final double x1 = leftEvent().point().x();
-        final double y1 = leftEvent().point().y();
-        final double x2 = rightEvent().point().x();
-        final double y2 = rightEvent().point().y();
-
-        final double y = y1 + ( ((y2 - y1) * (x - x1)) / (x2 - x1) );
-        this.setPosition(y);
     }
 }

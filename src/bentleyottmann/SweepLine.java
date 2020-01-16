@@ -36,4 +36,10 @@ class SweepLine extends TreeSet<SweepSegment> {
     SweepSegment below(@NotNull SweepSegment s) {
         return lower(s);
     }
+
+    void updatePositions(double x) {
+        for (SweepSegment s : this) {
+            s.updatePosition(x);
+        }
+    }
 }

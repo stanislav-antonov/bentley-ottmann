@@ -42,10 +42,16 @@ final public class BentleyOttmann {
             if (E.type() == Event.Type.POINT_LEFT) {
                 final SweepSegment segE = E.firstSegment();
 
+                mSweepLine.updatePositions(E.point().x());
                 mSweepLine.add(segE);
 
                 final SweepSegment segA = mSweepLine.above(segE);
                 final SweepSegment segB = mSweepLine.below(segE);
+
+                System.out.println("LEFT POINT -> seg: "
+                        + segE.segment().name()
+                        + ", above: " + (segA != null ? segA.segment().name() : "")
+                        + ", below: " + (segB != null ? segB.segment().name() : ""));
 
                 addEventIfIntersection(segE, segA, E, false);
                 addEventIfIntersection(segE, segB, E, false);
@@ -54,7 +60,13 @@ final public class BentleyOttmann {
                 final SweepSegment segA = mSweepLine.above(segE);
                 final SweepSegment segB = mSweepLine.below(segE);
 
+                System.out.println("RIGHT POINT -> seg: "
+                        + segE.segment().name()
+                        + ", above: " + (segA != null ? segA.segment().name() : "")
+                        + ", below: " + (segB != null ? segB.segment().name() : ""));
+
                 mSweepLine.remove(segE);
+
                 addEventIfIntersection(segA, segB, E, true);
             } else {
                 mIntersections.add(E.point());
@@ -70,6 +82,13 @@ final public class BentleyOttmann {
 
                 final SweepSegment segA = mSweepLine.above(segE2);
                 final SweepSegment segB = mSweepLine.below(segE1);
+
+                System.out.println("INTERSECTION POINT -> seg1: "
+                        + segE1.segment().name()
+                        + ", seg2: " + segE2.segment().name()
+                        + ", above " + segE2.segment().name() + ": " + (segA != null ? segA.segment().name() : "")
+                        + ", below " + segE1.segment().name() + ": " + (segB != null ? segB.segment().name() : ""));
+
                 addEventIfIntersection(segE2, segA, E, true);
                 addEventIfIntersection(segE1, segB, E, true);
             }
